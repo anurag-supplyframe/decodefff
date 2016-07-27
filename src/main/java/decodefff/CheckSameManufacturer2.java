@@ -26,6 +26,9 @@ import supplyframe.utils.FieldIntPair;
 
 
 /*
+ * This job populates the manufacturer2 field of the pairs of fff parts
+ * 
+ * 
 hadoop jar decodefff-0.0.1-SNAPSHOT-jar-with-dependencies.jar \
 decodefff.CheckSameManufacturer2 \
 -Dmapred.reduce.tasks=10 -Ddfs.replication=1 \

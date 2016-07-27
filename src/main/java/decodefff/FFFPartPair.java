@@ -22,6 +22,9 @@ import org.apache.hadoop.util.ToolRunner;
 
 
 /*
+ * This job will create all the pairs of parts which are fff
+ * Note this creates permutation and not combinations
+ * 
 hadoop jar decodefff-0.0.1-SNAPSHOT-jar-with-dependencies.jar decodefff.FFFPartPair \
 -Ddfs.replication=1 \
 /prod/partsio/fff/ /user/amishra/fff_pairwise 

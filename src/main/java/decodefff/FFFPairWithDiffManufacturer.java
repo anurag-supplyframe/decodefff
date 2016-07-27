@@ -22,6 +22,8 @@ import org.apache.hadoop.util.ToolRunner;
 
 
 /*
+ * 01. How to write something to the hdfs file system from within a hadoop job
+ * 
 hadoop jar decodefff-0.0.1-SNAPSHOT-jar-with-dependencies.jar \
 decodefff.FFFPairWithDiffManufacturer \
 -Dmapred.reduce.tasks=0 \
