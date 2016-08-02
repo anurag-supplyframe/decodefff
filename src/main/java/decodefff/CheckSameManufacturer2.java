@@ -1,6 +1,7 @@
 package decodefff;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import org.apache.hadoop.conf.Configuration;
@@ -35,6 +36,11 @@ decodefff.CheckSameManufacturer2 \
 /user/amishra/partsio_extract/ \
 /user/amishra/fff_pairwise_man1  \
 /user/amishra/fff_pairwise_man2
+ */
+
+
+/*
+ * #1 The same part number can belong to different manufacturer
  */
 public class CheckSameManufacturer2 extends Configured implements Tool {
 
@@ -87,20 +93,29 @@ public class CheckSameManufacturer2 extends Configured implements Tool {
 		protected void reduce(FieldIntPair key, Iterable<FieldIntPair> vals,
 				Reducer<FieldIntPair, FieldIntPair, FieldWritable, NullWritable>.Context context)
 				throws IOException, InterruptedException {
-				
-			context.progress();
-			String manu="#####";
-			Iterator<FieldIntPair> itr=vals.iterator();
-			while(itr.hasNext()){
-				FieldIntPair fip=itr.next();
-				if(fip.mark.get()==0){
-					manu = fip.field.get("manufacturer");
-					
-				}else{
-					keyOut.set(fip.field.toString()+"\t"+manu);
-					context.write(keyOut, NullWritable.get());
+
+			String defaultManu = "#####";
+			HashSet<String> manuSet =  new HashSet<String>();
+			Iterator<FieldIntPair> itr = vals.iterator();
+			while (itr.hasNext()) {
+				FieldIntPair fip = itr.next();
+				if (fip.mark.get() == 0) {
+					manuSet.add ( fip.field.get("manufacturer") );
+
+				} else {
+					if (manuSet.isEmpty() == false){
+						for(String str: manuSet){
+							keyOut.set(fip.field.toString() + "\t" + str);
+							context.write(keyOut, NullWritable.get());
+						}
+
+					}else{
+						keyOut.set(fip.field.toString() + "\t" + defaultManu);
+						context.write(keyOut, NullWritable.get());
+					}
+
 				}
-				
+
 			}
 		}
 		
